@@ -3,7 +3,8 @@ import { GetUserParams, PostUserSchema, postUserSchema } from "./schemas";
 import { createUser } from "../../modules/user/repository/createUser";
 
 export async function usersController(fastify: FastifyInstance) {
-  fastify.get("/users", async () => {
+  fastify.get("/users", async (req) => {
+    req.log.info("Exemplo de log")
     return fastify.prisma.user.findMany();
   });
 

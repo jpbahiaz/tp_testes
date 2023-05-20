@@ -2,12 +2,13 @@
   "compilerOptions": {
     "target": "es2018",
     "lib": ["ESNext"],
-    "module": "ESNext",
+    "module": "CommonJS",
     "skipLibCheck": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "esModuleInterop": true, 
 
     /* Linting */
     "strict": true,

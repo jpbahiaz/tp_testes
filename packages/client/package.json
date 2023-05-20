@@ -1,15 +1,15 @@
 {
-  "name": "tp_testes",
+  "name": "client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "ts-node-dev --respawn --transpile-only --exit-child --watch server server/index.ts",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "vitest run",
+    "test.watch": "vitest",
     "test.coverage": "vitest run --coverage",
     "test.ui": "vitest --ui --coverage"
   },
