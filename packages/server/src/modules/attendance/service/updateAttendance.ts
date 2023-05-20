@@ -4,11 +4,11 @@ import { getAttendanceById } from "../repository/getAttendanceById";
 import { removeAllRecordingsByAttendanceId } from "../repository/removeAllRecordingsByAttendanceId";
 import { createRecording } from "../repository/createRecording";
 
-export const updateAttendance = async (attendanceId: number, timestamps: Date[], fastify: FastifyInstance): Promise<ApiError | undefined> => {
+export const updateAttendance = async (attendanceId: number, timestamps: Date[], fastify: FastifyInstance) => {
     let attendance = await getAttendanceById(attendanceId, fastify.prisma);
 
     if (!attendance) {
-        return { statusCode: 404, message: "Ponto não registrado." };
+        throw new ApiError(404, "Ponto não registrado.");
     }
 
     await removeAllRecordingsByAttendanceId(attendanceId, fastify.prisma);

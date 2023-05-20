@@ -5,11 +5,11 @@ import { createAttendance } from "../repository/createAttendance";
 import { getTodayAttendanceByUserId } from "../repository/getTodayAttendanceByUserId";
 import { createRecording } from "../repository/createRecording";
 
-export const postAttendance = async (userId: string, fastify: FastifyInstance): Promise<ApiError | undefined> => {
+export const postAttendance = async (userId: string, fastify: FastifyInstance) => {
     let user = await getUser(userId, fastify);
 
     if (!user) {
-        return { statusCode: 404, message: "Usuário inválido" };
+        throw new ApiError(404, "Usuário inválido!");
     }
 
     var attendance = await getTodayAttendanceByUserId(userId, fastify.prisma) ?? await createAttendance(userId, fastify.prisma)

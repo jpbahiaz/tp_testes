@@ -10,7 +10,7 @@ export const getLastAttendances = async (userId: string, fastify: FastifyInstanc
     let user = await getUser(userId, fastify);
 
     if (!user) {
-        throw { statusCode: 404, message: "Usuário inválido" };
+        throw new ApiError(404, "Usuário inválido");
     }
 
     let beginningOfTheWeek = startOfDay(startOfWeek(new Date()))
