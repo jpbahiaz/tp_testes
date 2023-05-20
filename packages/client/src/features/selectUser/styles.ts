@@ -3,6 +3,8 @@ import styled from "styled-components";
 export const UserList = styled.div`
   display: flex;
   flex-flow: row;
+  align-items: center;
+  justify-content: space-between;
   margin: 20px 0;
 `;
 

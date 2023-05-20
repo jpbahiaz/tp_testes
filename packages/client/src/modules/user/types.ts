@@ -9,4 +9,5 @@ export type UserStore = {
   currentUser: User | null
   usersReceived: (users: User[]) => void
   selectCurrentUser: (user: User) => void
+  addUser: (user: User) => void
 }

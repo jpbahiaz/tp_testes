@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { userStore } from "../../stores/user/store";
+import { userStore } from "../../modules/user/store";
 import { CreateUserContainer, CreateUserField, UserList } from "./styles";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -11,10 +11,15 @@ type CreateUserInputs = {
 function SelectUser() {
   const allUsers = userStore((state) => state.all);
   const selectUser = userStore((state) => state.selectCurrentUser);
+  const addUser = userStore((state) => state.addUser);
   const [isCreatingUser, setIsCreatingUser] = useState(false);
 
-  const { register, handleSubmit } = useForm<CreateUserInputs>();
-  const onSubmit: SubmitHandler<CreateUserInputs> = (data) => console.log(data);
+  const { register, handleSubmit, reset } = useForm<CreateUserInputs>();
+  const onSubmit: SubmitHandler<CreateUserInputs> = (data) => {
+    setIsCreatingUser(false)
+    reset()
+    addUser({ ...data, id: "" })
+  };
 
   return (
     <div>
@@ -22,7 +27,7 @@ function SelectUser() {
       <div>
         {allUsers.length ? (
           allUsers.map((user) => (
-            <UserList>
+            <UserList key={user.email}>
               <div>
                 {user.name} - {user.email}
               </div>
