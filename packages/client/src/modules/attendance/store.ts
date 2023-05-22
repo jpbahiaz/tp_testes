@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Attendance, AttendanceStore, Recording } from "./types";
 import { produce } from "immer";
+import { addRecording, saveRecordings } from "./functions";
 
 export const attendanceStore = create<AttendanceStore>((set) => ({
   all: [
@@ -30,22 +31,11 @@ export const attendanceStore = create<AttendanceStore>((set) => ({
   ],
   attendancesReceived: (attendances: Attendance[]) => set({ all: attendances }),
   addRecording: (recording: Recording) =>
-    set(
-      produce<AttendanceStore>((state) => {
-        const attendance = state.all[0];
-        if (attendance) {
-          attendance.recordings.push(recording);
-        }
-      })
-    ),
+    set(produce<AttendanceStore>((state) => addRecording(recording, state))),
   saveRecordings: (attendanceId: string, recordings: Recording[]) =>
     set(
-      produce<AttendanceStore>((state) => {
-        const attendance = state.all.find((att) => att.id == attendanceId);
-        if (attendance) {
-          attendance.recordings = recordings;
-          attendance.status = "WAITING_APPROVAL"
-        }
-      })
+      produce<AttendanceStore>((state) =>
+        saveRecordings(recordings, attendanceId, state)
+      )
     ),
 }));

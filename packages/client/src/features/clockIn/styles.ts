@@ -6,6 +6,7 @@ export const ClockInButtonContainer = styled.div`
 
   button {
     font-size: 30px;
+    width: 100%;
   }
 `;
 
@@ -39,3 +40,15 @@ export const AttendanceItem = styled.div`
     padding-left: 20px;
   }
 `;
+
+export const AttendanceFilters = styled.div`
+  margin: 20px 0;
+  display: flex;
+  flex-flow: row;
+  gap: 10px;
+
+  .selected {
+    background: white;
+    color: black;
+  }
+`
