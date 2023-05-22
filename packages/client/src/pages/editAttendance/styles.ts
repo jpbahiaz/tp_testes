@@ -7,3 +7,14 @@ export const EditAttendanceActions = styled.div`
   justify-content: center;
   gap: 20px;
 `;
+
+export const TimestampField = styled.div`
+  display: flex;
+  flex-flow: column;
+`
+
+export const TimestampsContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  gap: 10px;
+`

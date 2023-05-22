@@ -1,7 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { attendanceStore } from "../../modules/attendance/store";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
-import { EditAttendanceActions } from "./styles";
+import {
+  EditAttendanceActions,
+  TimestampField,
+  TimestampsContainer,
+} from "./styles";
+import { isTimestamp, timestampMask } from "./functions";
 
 function EditAttendance() {
   const params = useParams<{ attendaceId: string }>();
@@ -10,7 +15,12 @@ function EditAttendance() {
     state.all.find((att) => att.id == params.attendaceId)
   );
   const saveRecordings = attendanceStore((state) => state.saveRecordings);
-  const { register, handleSubmit, control } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       recordings: attendance?.recordings || [],
     },
@@ -23,10 +33,10 @@ function EditAttendance() {
   const onSubmit: SubmitHandler<any> = (data) => {
     if (attendance) {
       saveRecordings(attendance.id, data.recordings);
-      console.log("saved")
+      console.log("saved");
     }
 
-    navigate("/")
+    navigate("/");
   };
 
   return attendance ? (
@@ -34,12 +44,28 @@ function EditAttendance() {
       <h1>{attendance.referenceDay}</h1>
       <h3>{attendance.status}</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {fields.map((recording, index) => (
-          <input
-            key={recording.id}
-            {...register(`recordings.${index}.timestamp`)}
-          />
-        ))}
+        <TimestampsContainer>
+          {fields.map((recording, index) => (
+            <TimestampField key={recording.id}>
+              <input
+                {...register(`recordings.${index}.timestamp`, {
+                  validate: {
+                    isTimestamp,
+                  },
+                })}
+                onKeyUp={(e) => {
+                  const target = e.target as HTMLInputElement;
+                  if (e.key != "Backspace") {
+                    target.value = timestampMask(target.value);
+                  }
+                }}
+              />
+              {errors.recordings && errors.recordings[index]?.timestamp && (
+                <div>Campo Inválido</div>
+              )}
+            </TimestampField>
+          ))}
+        </TimestampsContainer>
         <EditAttendanceActions>
           <button
             onClick={(e) => {

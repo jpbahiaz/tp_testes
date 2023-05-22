@@ -4,11 +4,13 @@ export type Recording = {
   attendanceId: string;
 };
 
+export type Status = "PENDING" | "WAITING_APPROVAL" | "DONE"
+
 export type Attendance = {
   id: string;
   userId: string;
   referenceDay: string;
-  status: string;
+  status: Status;
   recordings: Recording[];
 };
 
