@@ -1,6 +1,7 @@
 import fp from 'fastify-plugin'
 import { FastifyPluginAsync } from 'fastify'
 import { PrismaClient } from '@prisma/client'
+import { ApiError } from '../models/Error'
 
 // Use TypeScript module augmentation to declare the type of server.prisma to be PrismaClient
 declare module 'fastify' {
@@ -20,6 +21,14 @@ const prismaPlugin: FastifyPluginAsync = fp(async (server) => {
   server.addHook('onClose', async (server) => {
     await server.prisma.$disconnect()
   })
+
+  server.setErrorHandler((error, request, reply) => {
+    error instanceof ApiError 
+    ? 
+    reply.code(error.statusCode!).send({ message: error.message }) 
+    : 
+    reply.code(500).send({ message: "Ocorreu um erro. Por favor, tente novamente" })
+  });
 })
 
 export default prismaPlugin

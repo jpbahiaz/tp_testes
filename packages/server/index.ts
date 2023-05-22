@@ -4,6 +4,7 @@ import { usersController } from "./src/controllers/users";
 import prismaPlugin from "./src/plugins/prisma";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import fastifyCors from "@fastify/cors";
+import { attendanceController } from "./src/controllers/attendance";
 
 const envToLogger = {
   development: {
@@ -35,6 +36,7 @@ fastify.register(prismaPlugin);
 
 // Routes
 fastify.register(usersController);
+fastify.register(attendanceController);
 
 fastify.listen({ port, host: "0.0.0.0" }, function (err) {
   if (err) {

@@ -14,4 +14,21 @@ model User {
   id              String              @id @default(uuid())
   email           String              @unique
   name            String
+  attendances     Attendance[]
+}
+
+model Attendance {
+  id              Int                 @id @default(autoincrement())
+  userId          String              
+  user            User                @relation(fields: [userId], references: [id])
+  referenceDay    DateTime            
+  recordings      Recording[]
+  status          String              @default("PENDING")
+}
+
+model Recording {
+  id              Int                 @id @default(autoincrement())
+  timestamp       DateTime
+  attendanceId    Int                 
+  attendance      Attendance          @relation(fields: [attendanceId], references: [id])
 }
