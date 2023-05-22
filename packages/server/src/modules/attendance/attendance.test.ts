@@ -22,10 +22,10 @@ describe("AttendanceModule", () => {
       });
       
       it("pontos em dias diferentes, deve lançar ApiError", () => {
-        let first = new Date();
-        let second = addHours(first, 1);
-        let third = addHours(second, 1);
-        let tomorrow = addDays(third, 1);
+        let first = new Date("2023-05-20T03:00:00.000Z");
+        let second = new Date("2023-05-20T04:00:00.000Z");
+        let third = new Date("2023-05-20T05:00:00.000Z");
+        let tomorrow = new Date("2023-05-21T03:00:00.000Z");
 
         let timestamps = [first, second, third, tomorrow];
 
@@ -33,10 +33,10 @@ describe("AttendanceModule", () => {
       });
 
       it("pontos fora de ordem, deve lançar ApiError", () => {
-        let first = new Date();
-        let second = addHours(first, 1);
-        let third = addHours(second, 1);
-        let fourth = addHours(third, 1);
+        let first = new Date("2023-05-20T03:00:00.000Z");
+        let second = new Date("2023-05-20T04:00:00.000Z");
+        let third = new Date("2023-05-20T05:00:00.000Z");
+        let fourth = new Date("2023-05-20T06:00:00.000Z");
         let timestamps = [fourth, third, second, first];
 
         expect(() => validateRecordings(timestamps)).toThrowError();
@@ -47,10 +47,10 @@ describe("AttendanceModule", () => {
     describe("Dado horários corretos fornecidos", () => {
       
       it("deve passar nas validações", () => {
-        let first = new Date();
-        let second = addHours(first, 1);
-        let third = addHours(second, 1);
-        let fourth = addHours(third, 1);
+        let first = new Date("2023-05-20T03:00:00.000Z");
+        let second = new Date("2023-05-20T04:00:00.000Z");
+        let third = new Date("2023-05-20T05:00:00.000Z");
+        let fourth = new Date("2023-05-20T06:00:00.000Z");
         let timestamps = [first, second, third, fourth];
 
         expect(validateRecordings(timestamps)).toBe(true);
