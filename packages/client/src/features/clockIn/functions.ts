@@ -12,9 +12,9 @@ export function statusToColor(status: Status) {
         WAITING_APPROVAL: "yellow",
         PENDING: "red",
         DONE: "green",
-    }
+    };
 
-    return colors[status] || "gray"
+    return colors[status] || "gray";
 }
 
 export function statusToText(status: Status) {
@@ -22,7 +22,22 @@ export function statusToText(status: Status) {
         WAITING_APPROVAL: "Aguardando Aprovação",
         PENDING: "Pendente",
         DONE: "Concluído",
+    };
+
+    return texts[status] || "Desconhecido";
+}
+
+export function isFilterSelected(filters: Set<Status>, status: Status) {
+    return filters.has(status);
+}
+
+export function toggleFilter(filters: Set<Status>, status: Status) {
+    const set = new Set(filters);
+    if (isFilterSelected(filters, status)) {
+        set.delete(status);
+    } else {
+        set.add(status);
     }
 
-    return texts[status] || "Desconhecido"
+    return set;
 }
