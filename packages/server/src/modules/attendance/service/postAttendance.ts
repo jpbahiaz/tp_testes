@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { getUser } from "../../user/repository/getUser";
-import { ApiError } from "../../../models/Error";
+import { ApiError } from "../../../models/error";
 import { createAttendance } from "../repository/createAttendance";
 import { getTodayAttendanceByUserId } from "../repository/getTodayAttendanceByUserId";
 import { createRecording } from "../repository/createRecording";

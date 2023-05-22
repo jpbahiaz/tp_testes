@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { ApiError } from "../../../models/Error";
+import { ApiError } from "../../../models/error";
 import { getAttendanceById } from "../repository/getAttendanceById";
 import { removeAllRecordingsByAttendanceId } from "../repository/removeAllRecordingsByAttendanceId";
 import { createRecording } from "../repository/createRecording";

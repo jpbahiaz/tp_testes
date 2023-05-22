@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { ApiError } from "../../../models/Error";
+import { ApiError } from "../../../models/error";
 import { Attendance } from "@prisma/client";
 import { getUser } from "../../user/repository/getUser";
 import { startOfWeek } from "date-fns";

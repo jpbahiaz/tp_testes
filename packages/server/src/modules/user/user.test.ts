@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { validateUser } from "./service/postUser";
-import { ApiError } from "../../models/Error";
 
 describe("UserModule" , () => {
 
