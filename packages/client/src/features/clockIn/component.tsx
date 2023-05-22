@@ -6,6 +6,7 @@ import {
   ClockInButtonContainer,
 } from "./styles";
 import { v4 } from "uuid";
+import { statusToColor, statusToText, timestampFromDate } from "./functions";
 
 function ClockIn() {
   const attendances = attendanceStore((state) => state.all);
@@ -13,15 +14,11 @@ function ClockIn() {
   const navigate = useNavigate();
 
   function createRecording() {
-    const date = new Date();
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-
     // Temporário enquanto não chama o back
     addRecording({
       id: v4(),
       attendanceId: "",
-      timestamp: `${hours}:${minutes}`,
+      timestamp: timestampFromDate(new Date()),
     });
   }
 
@@ -40,7 +37,12 @@ function ClockIn() {
               key={attendance.id}
             >
               <div className="date">{attendance.referenceDay}</div>
-              <div className="status">{attendance.status}</div>
+              <div
+                className="status"
+                style={{ color: statusToColor(attendance.status) }}
+              >
+                {statusToText(attendance.status)}
+              </div>
               <div className="recordings">
                 {attendance.recordings.map((recording) => (
                   <div key={recording.id}>{recording.timestamp}</div>

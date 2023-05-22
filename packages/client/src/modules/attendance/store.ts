@@ -11,14 +11,11 @@ export const attendanceStore = create<AttendanceStore>((set) => ({
       recordings: [
         { id: "6334-gadf", timestamp: "08:00", attendanceId: "52545-gad" },
         { id: "6335-gadf", timestamp: "12:00", attendanceId: "52545-gad" },
-        { id: "6336-gadf", timestamp: "16:00", attendanceId: "52545-gad" },
-        { id: "6337-gadf", timestamp: "16:30", attendanceId: "52545-gad" },
-        { id: "6338-gadf", timestamp: "18:00", attendanceId: "52545-gad" },
       ],
       referenceDay: "20/05/2023",
     },
     {
-      status: "PENDING",
+      status: "DONE",
       id: "5124-sdaf",
       userId: "",
       recordings: [
@@ -47,6 +44,7 @@ export const attendanceStore = create<AttendanceStore>((set) => ({
         const attendance = state.all.find((att) => att.id == attendanceId);
         if (attendance) {
           attendance.recordings = recordings;
+          attendance.status = "WAITING_APPROVAL"
         }
       })
     ),
