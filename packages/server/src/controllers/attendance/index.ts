@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { GetLastAttendancesParams, PostAttendanceParams, PutAttendanceParams, PutAttendanceSchema } from "./schemas";
 import { postAttendance } from "../../modules/attendance/service/postAttendance";
-import { updateAttendance } from "../../modules/attendance/service/updateAttendance";
+import { editAttendance } from "../../modules/attendance/service/editAttendance";
 import { getLastAttendances } from "../../modules/attendance/service/getLastAttendances";
 
 export async function attendanceController(fastify: FastifyInstance) {
@@ -16,7 +16,7 @@ export async function attendanceController(fastify: FastifyInstance) {
         "/attendance/:attendanceId",
         async (req, reply) => {
             let timestamps = req.body.recordings.map(it => it.timestamp )
-            return await updateAttendance(req.params.attendanceId, timestamps, fastify)
+            return await editAttendance(req.params.attendanceId, timestamps, fastify)
         }
     )
 

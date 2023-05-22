@@ -15,5 +15,7 @@ export const getLastAttendances = async (userId: string, fastify: FastifyInstanc
 
     let beginningOfTheWeek = startOfDay(startOfWeek(new Date()))
 
-    return await getAttendancesSinceDateByUserId(user.id, beginningOfTheWeek, fastify.prisma)
+    return sortAttendancesDescending(await getAttendancesSinceDateByUserId(user.id, beginningOfTheWeek, fastify.prisma))
 }
+
+const sortAttendancesDescending = (attendances: Attendance[]) => attendances.sort((a,b) => a.referenceDay.getTime() - b.referenceDay.getTime())
