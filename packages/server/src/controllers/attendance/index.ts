@@ -3,6 +3,7 @@ import { GetLastAttendancesParams, PostAttendanceParams, PutAttendanceParams, Pu
 import { postAttendance } from "../../modules/attendance/service/postAttendance";
 import { editAttendance } from "../../modules/attendance/service/editAttendance";
 import { getLastAttendances } from "../../modules/attendance/service/getLastAttendances";
+import { parseISO } from "date-fns";
 
 export async function attendanceController(fastify: FastifyInstance) {
     fastify.post<{ Params: PostAttendanceParams }>(
@@ -15,8 +16,9 @@ export async function attendanceController(fastify: FastifyInstance) {
     fastify.put<{ Body: PutAttendanceSchema, Params: PutAttendanceParams }>(
         "/attendance/:attendanceId",
         async (req, reply) => {
-            let timestamps = req.body.recordings.map(it => it.timestamp )
-            return await editAttendance(req.params.attendanceId, timestamps, fastify)
+            let timestamps = req.body.recordings.map((it) => parseISO(it))
+            
+            return await editAttendance(Number(req.params.attendanceId), timestamps, fastify)
         }
     )
 

@@ -1,5 +1,4 @@
 import { Static, Type } from "@sinclair/typebox";
-import { timeStamp } from "console";
 
 /* 
  * PUT /attendance/:attendance 
@@ -7,9 +6,7 @@ import { timeStamp } from "console";
 
 export const putAttendanceSchema = Type.Object({
     recordings: Type.Array(
-      Type.Object({
-        timestamp: Type.Date()
-      })
+      Type.String()
     ),
 });
 

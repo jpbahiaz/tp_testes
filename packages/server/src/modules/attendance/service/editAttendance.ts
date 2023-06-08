@@ -20,11 +20,15 @@ export const editAttendance = async (attendanceId: number, timestamps: Date[], f
 
   await removeAllRecordingsByAttendanceId(attendanceId, fastify.prisma);
 
-  let jobs = timestamps.map((timestamp) => {
-    createRecording(attendanceId, timestamp, fastify.prisma)
+  let creatingRecordingPromises = timestamps.map((timestamp) => {
+    return createRecording(attendanceId, timestamp, fastify.prisma)
   })
 
-  Promise.all(jobs);
+  let recordings = await Promise.all(creatingRecordingPromises);
+
+  attendance.recordings = recordings
+
+  return attendance
 }
 
 export const validateRecordings = (timestamps: Date[]) => {

@@ -1,4 +1,4 @@
-import { Attendance, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { startOfDay } from "date-fns";
 
 export const createAttendance = (userId: string, prisma: PrismaClient) =>
@@ -6,5 +6,8 @@ export const createAttendance = (userId: string, prisma: PrismaClient) =>
     data: {
       referenceDay: startOfDay(new Date()),
       userId: userId,
-    },  
+    }, 
+    include: {
+      recordings: true
+    } 
   });

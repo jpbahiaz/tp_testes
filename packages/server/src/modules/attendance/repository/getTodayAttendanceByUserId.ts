@@ -7,4 +7,7 @@ export const getTodayAttendanceByUserId = (userId: string, prisma: PrismaClient)
       userId,
       referenceDay: startOfDay(new Date())
     },
+    include: {
+      recordings: true
+    }
   });
