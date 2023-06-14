@@ -31,4 +31,4 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        files: ./packages/client/coverage, ./packages/server/coverage
+        files: ./packages/client/coverage/*, ./packages/server/coverage/*
