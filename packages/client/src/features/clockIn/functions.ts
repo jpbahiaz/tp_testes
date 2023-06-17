@@ -7,6 +7,14 @@ export function timestampFromDate(date: Date) {
     return `${hours}:${minutes}`;
 }
 
+export function maskFromDate(date: Date) {
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = date.getMonth().toString().padStart(2, "0");
+    const year = date.getFullYear().toString();
+
+    return `${day}/${month}/${year}`;
+}
+
 export function statusToColor(status: Status) {
     const colors: Record<Status, string> = {
         WAITING_APPROVAL: "yellow",

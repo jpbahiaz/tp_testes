@@ -9,6 +9,10 @@ export const getAttendancesSinceDateByUserId = (userId: string, since: Date, pri
       }
     },
     include: {
-      recordings: true,
+      recordings: {
+        orderBy: {
+          timestamp: "asc"
+        }
+      },
     }
   })

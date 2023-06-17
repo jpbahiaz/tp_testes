@@ -1,11 +1,13 @@
-import { Attendance, PrismaClient } from "@prisma/client"
+import { Attendance, PrismaClient } from "@prisma/client";
 
-export const updateAttendance = (attendance: Attendance, prisma: PrismaClient) => 
+export const updateAttendance = (
+    id: number,
+    attendance: Partial<Attendance>,
+    prisma: PrismaClient
+) =>
     prisma.attendance.update({
         where: {
-            id: attendance.id
+            id,
         },
-        data: {
-            ...attendance
-        }
+        data: attendance,
     });

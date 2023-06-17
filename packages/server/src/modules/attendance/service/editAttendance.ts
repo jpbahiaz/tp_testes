@@ -6,7 +6,11 @@ import { createRecording } from "../repository/createRecording";
 import { compareAsc, isSameDay } from "date-fns";
 import { updateAttendance } from "../repository/updateAttendance";
 
-export const editAttendance = async (attendanceId: number, timestamps: Date[], fastify: FastifyInstance) => {
+export const editAttendance = async (
+  attendanceId: number,
+  timestamps: Date[],
+  fastify: FastifyInstance
+) => {
   let attendance = await getAttendanceById(attendanceId, fastify.prisma);
 
   if (!attendance) {
@@ -16,40 +20,56 @@ export const editAttendance = async (attendanceId: number, timestamps: Date[], f
   validateRecordings(timestamps);
 
   attendance.status = "WAITING_APPROVAL";
-  updateAttendance(attendance, fastify.prisma);
+  await updateAttendance(
+    attendanceId,
+    { status: "WAITING_APPROVAL" },
+    fastify.prisma
+  ).catch((e) => console.error(e));
 
   await removeAllRecordingsByAttendanceId(attendanceId, fastify.prisma);
 
   let creatingRecordingPromises = timestamps.map((timestamp) => {
-    return createRecording(attendanceId, timestamp, fastify.prisma)
-  })
+    return createRecording(attendanceId, timestamp, fastify.prisma);
+  });
 
   let recordings = await Promise.all(creatingRecordingPromises);
 
-  attendance.recordings = recordings
+  attendance.recordings = recordings;
 
-  return attendance
-}
+  return attendance;
+};
 
 export const validateRecordings = (timestamps: Date[]) => {
   if (timestamps.length < 4) {
     // Mínimo 4 pontos necessários (Início expediente, início almoço, fim almoço, fim expediente)
-    throw new ApiError(400, "Devem ser fornecidos os horários dos pontos registrados!");
+    throw new ApiError(
+      400,
+      "Devem ser fornecidos os horários dos pontos registrados!"
+    );
   }
 
   if (hasOddSize(timestamps)) {
-    throw new ApiError(400, `Os registros estão incompletos. Foram fornecidos somente ${timestamps.length} pontos`);
+    throw new ApiError(
+      400,
+      `Os registros estão incompletos. Foram fornecidos somente ${timestamps.length} pontos`
+    );
   }
 
   if (!areAllOnTheSameDay(timestamps)) {
-    throw new ApiError(400, "Todas as os pontos registrados precisam ser no mesmo dia!");
+    throw new ApiError(
+      400,
+      "Todas as os pontos registrados precisam ser no mesmo dia!"
+    );
   }
 
   if (!areTimestampsOrdered(timestamps)) {
-    throw new ApiError(400, "Os pontos registrados precisam estar ordenados para ter consistência!")
+    throw new ApiError(
+      400,
+      "Os pontos registrados precisam estar ordenados para ter consistência!"
+    );
   }
-  return true
-}
+  return true;
+};
 
 const areAllOnTheSameDay = (dates: Date[]): boolean => {
   const referenceDate = dates[0];
@@ -62,7 +82,7 @@ const areAllOnTheSameDay = (dates: Date[]): boolean => {
   }
 
   return true;
-}
+};
 
 const areTimestampsOrdered = (dates: Date[]): boolean => {
   for (let i = 1; i < dates.length; i++) {
@@ -74,6 +94,6 @@ const areTimestampsOrdered = (dates: Date[]): boolean => {
   }
 
   return true;
-}
+};
 
-const hasOddSize = (array: any[]) => array.length % 2 != 0
+const hasOddSize = (array: any[]) => array.length % 2 != 0;

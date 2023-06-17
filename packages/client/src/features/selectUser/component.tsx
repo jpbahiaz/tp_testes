@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { userStore } from "../../modules/user/store";
 import { CreateUserContainer, CreateUserField, UserList } from "./styles";
 import { SubmitHandler, useForm } from "react-hook-form";
+import axios from "axios";
+import { BASE_URL } from "../../shared/constants";
 
 type CreateUserInputs = {
   name: string;
@@ -10,15 +12,29 @@ type CreateUserInputs = {
 
 function SelectUser() {
   const allUsers = userStore((state) => state.all);
+  const usersReceived = userStore((state) => state.usersReceived);
   const selectUser = userStore((state) => state.selectCurrentUser);
   const addUser = userStore((state) => state.addUser);
   const [isCreatingUser, setIsCreatingUser] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function getUsers() {
+      const users = await axios.get(`${BASE_URL}/users`);
+      usersReceived(users.data)
+    }
+
+    getUsers();
+  }, []);
 
   const { register, handleSubmit, reset } = useForm<CreateUserInputs>();
-  const onSubmit: SubmitHandler<CreateUserInputs> = (data) => {
-    setIsCreatingUser(false)
-    reset()
-    addUser({ ...data, id: "" })
+  const onSubmit: SubmitHandler<CreateUserInputs> = async (data) => {
+    setLoading(true);
+    await axios.post(`${BASE_URL}/users`, data);
+    setIsCreatingUser(false);
+    setLoading(false);
+    reset();
+    addUser({ ...data, id: "" });
   };
 
   return (
@@ -57,7 +73,9 @@ function SelectUser() {
             <CreateUserField>
               <input placeholder="Email" {...register("email")} />
             </CreateUserField>
-            <button type="submit">Criar</button>
+            <button disabled={loading} type="submit">
+              Criar
+            </button>
           </form>
         )}
       </CreateUserContainer>

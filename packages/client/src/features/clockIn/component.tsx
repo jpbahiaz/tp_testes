@@ -9,30 +9,47 @@ import {
 import { v4 } from "uuid";
 import {
   isFilterSelected,
+  maskFromDate,
   statusToColor,
   statusToText,
   timestampFromDate,
   toggleFilter,
 } from "./functions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Status } from "../../modules/attendance/types";
+import { userStore } from "../../modules/user/store";
+import { BASE_URL } from "../../shared/constants";
+import axios from "axios";
 
 function ClockIn() {
+  const user = userStore((state) => state.currentUser);
   const attendances = attendanceStore((state) => state.all);
-  const addRecording = attendanceStore((state) => state.addRecording);
+  const attendancesReceived = attendanceStore(
+    (state) => state.attendancesReceived
+  );
   const navigate = useNavigate();
   const [filters, setFilters] = useState<Set<Status>>(
     new Set(["DONE", "PENDING", "WAITING_APPROVAL"])
   );
 
-  function createRecording() {
-    // Temporário enquanto não chama o back
-    addRecording({
-      id: v4(),
-      attendanceId: "",
-      timestamp: timestampFromDate(new Date()),
-    });
+  async function getAttendances() {
+    if (user) {
+      const res = await axios.get(`${BASE_URL}/attendance/${user.id}`);
+      attendancesReceived(res.data);
+      console.log(res.data);
+    }
   }
+
+  async function createRecording() {
+    if (user) {
+      await axios.post(`${BASE_URL}/attendance/${user.id}`);
+      getAttendances();
+    }
+  }
+
+  useEffect(() => {
+    getAttendances();
+  }, []);
 
   return (
     <div>
@@ -75,7 +92,9 @@ function ClockIn() {
                   }}
                   key={attendance.id}
                 >
-                  <div className="date">{attendance.referenceDay}</div>
+                  <div className="date">
+                    {maskFromDate(new Date(attendance.referenceDay))}
+                  </div>
                   <div
                     className="status"
                     style={{ color: statusToColor(attendance.status) }}
@@ -84,7 +103,9 @@ function ClockIn() {
                   </div>
                   <div className="recordings">
                     {attendance.recordings.map((recording) => (
-                      <div key={recording.id}>{recording.timestamp}</div>
+                      <div key={recording.id}>
+                        {timestampFromDate(new Date(recording.timestamp))}
+                      </div>
                     ))}
                   </div>
                 </AttendanceItem>

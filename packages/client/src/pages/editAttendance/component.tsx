@@ -7,6 +7,14 @@ import {
   TimestampsContainer,
 } from "./styles";
 import { isTimestamp, timestampMask } from "./functions";
+import axios from "axios";
+import { BASE_URL } from "../../shared/constants";
+import {
+  maskFromDate,
+  timestampFromDate,
+} from "../../features/clockIn/functions";
+import { userStore } from "../../modules/user/store";
+import { useEffect, useState } from "react";
 
 function EditAttendance() {
   const params = useParams<{ attendaceId: string }>();
@@ -14,7 +22,6 @@ function EditAttendance() {
   const attendance = attendanceStore((state) =>
     state.all.find((att) => att.id == params.attendaceId)
   );
-  const saveRecordings = attendanceStore((state) => state.saveRecordings);
   const {
     register,
     handleSubmit,
@@ -22,27 +29,61 @@ function EditAttendance() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      recordings: attendance?.recordings || [],
+      recordings:
+        attendance?.recordings.map((r) => ({
+          ...r,
+          timestamp: timestampFromDate(new Date(r.timestamp)),
+        })) || [],
     },
   });
   const { fields } = useFieldArray({
     control,
     name: "recordings",
   });
+  const user = userStore((state) => state.currentUser);
+  const [message, setMessage] = useState("");
 
-  const onSubmit: SubmitHandler<any> = (data) => {
+  const onSubmit: SubmitHandler<any> = async (data) => {
     if (attendance) {
-      saveRecordings(attendance.id, data.recordings);
-      console.log("saved");
-    }
+      //saveRecordings(attendance.id, data.recordings);
+      console.log(data.recordings);
 
-    navigate("/");
+      axios
+        .put(`${BASE_URL}/attendance/${params.attendaceId}`, {
+          recordings: data.recordings.map((r: { timestamp: string }) => {
+            const date = attendance.referenceDay;
+            const match = r.timestamp.match(/(\d+):(\d+)/);
+
+            if (match) {
+              date.setHours(parseInt(match[1]));
+              date.setMinutes(parseInt(match[2]));
+            }
+
+            return date.toISOString();
+          }),
+        })
+        .then(() => {
+          console.log("saved");
+          navigate("/");
+        })
+        .catch((e) => {
+          console.log(e);
+          setMessage(e.response.data.message);
+        });
+    }
   };
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, []);
 
   return attendance ? (
     <div>
-      <h1>{attendance.referenceDay}</h1>
+      <h1>{maskFromDate(new Date(attendance.referenceDay))}</h1>
       <h3>{attendance.status}</h3>
+      {message && <h2>{message}</h2>}
       <form onSubmit={handleSubmit(onSubmit)}>
         <TimestampsContainer>
           {fields.map((recording, index) => (
