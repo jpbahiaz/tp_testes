@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test.coverage -ws"
+    "test": "npm run test.coverage -ws",
+    "test.integration": "npm run test.integration -ws --if-present"
   },
   "workspaces": ["packages/client", "packages/server"],
   "keywords": [],

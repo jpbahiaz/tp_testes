@@ -15,6 +15,6 @@ export const TimestampField = styled.div`
 
 export const TimestampsContainer = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-flow: column;
   gap: 10px;
 `

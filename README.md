@@ -44,3 +44,4 @@ com a ajuda do ORM Prisma.
 - Para rodar somente os testes de front-end, executar `npm run test -w client`
 - Para rodar os testes em uma interface gráfica, executar `npm run test.ui -w client (ou server)`
 - Na interface gráfica, clicar no canto superior direito na pasta ao lado do play para visualizar a cobertura de testes
+- Para rodar os testes de integração, executar `npm run test.integration`
