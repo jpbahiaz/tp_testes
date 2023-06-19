@@ -14,16 +14,15 @@ function SelectUser() {
   const allUsers = userStore((state) => state.all);
   const usersReceived = userStore((state) => state.usersReceived);
   const selectUser = userStore((state) => state.selectCurrentUser);
-  const addUser = userStore((state) => state.addUser);
   const [isCreatingUser, setIsCreatingUser] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    async function getUsers() {
-      const users = await axios.get(`${BASE_URL}/users`);
-      usersReceived(users.data)
-    }
+  async function getUsers() {
+    const users = await axios.get(`${BASE_URL}/users`);
+    usersReceived(users.data);
+  }
 
+  useEffect(() => {
     getUsers();
   }, []);
 
@@ -34,7 +33,7 @@ function SelectUser() {
     setIsCreatingUser(false);
     setLoading(false);
     reset();
-    addUser({ ...data, id: "" });
+    getUsers();
   };
 
   return (

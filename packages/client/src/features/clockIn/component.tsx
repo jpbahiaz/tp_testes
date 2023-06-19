@@ -35,7 +35,6 @@ function ClockIn() {
     if (user) {
       const res = await axios.get(`${BASE_URL}/attendance/${user.id}`);
       attendancesReceived(res.data);
-      console.log(res.data);
     }
   }
 
