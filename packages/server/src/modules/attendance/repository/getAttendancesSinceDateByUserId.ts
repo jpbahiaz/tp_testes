@@ -5,7 +5,7 @@ export const getAttendancesSinceDateByUserId = (userId: string, since: Date, pri
     where: {
       userId,
       referenceDay: {
-        gt: since
+        gte: since
       }
     },
     include: {

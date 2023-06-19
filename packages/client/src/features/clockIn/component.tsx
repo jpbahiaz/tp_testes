@@ -6,7 +6,6 @@ import {
   AttendanceList,
   ClockInButtonContainer,
 } from "./styles";
-import { v4 } from "uuid";
 import {
   isFilterSelected,
   maskFromDate,

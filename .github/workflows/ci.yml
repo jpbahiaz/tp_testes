@@ -31,3 +31,5 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Run Integration Tests
+      run: npm run test.integration
