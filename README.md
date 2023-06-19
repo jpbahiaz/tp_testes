@@ -6,7 +6,7 @@
 - João Pedro Bahia Zica             2017023609
 - João Victor de Souza Valgas       2019075711
 - Luis Gabriel Caetano Diniz        2019075711                 
-- Phillipe Lucas Santos Faria       2019054943
+- Philippe Lucas Santos Faria       2019054943
         
 
 ## Sobre o projeto
